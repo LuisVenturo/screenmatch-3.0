@@ -24,7 +24,7 @@ public class Serie {
     @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
     private List<Episodio> episodios;
 
-    public Serie(){}//siempre es necesario tener un constructor predeterminado puesto que personalizamos uno
+    public Serie(){}//siempre es necesario tener un constructor predeterminado, puesto que personalizamos uno
     public Serie(DatosSerie datosSerie) {
         this.titulo = datosSerie.titulo();
         this.totalTemporadas = datosSerie.totalTemporadas();
