@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,7 +16,7 @@ public class SerieService {
     SerieRepository repository;
     public List<SerieDTO> obtenerTodasLasSeries(){
         return repository.findAll().stream()
-                .map(serie -> new SerieDTO(serie.getTitulo(), serie.getTotalTemporadas(), serie.getEvaluacion(), serie.getPoster(), serie.getGenero(),
+                .map(serie -> new SerieDTO(serie.getId(), serie.getTitulo(), serie.getTotalTemporadas(), serie.getEvaluacion(), serie.getPoster(), serie.getGenero(),
                         serie.getActores(), serie.getSinopsis()))
                 .collect(Collectors.toList());
     }
@@ -25,10 +26,24 @@ public class SerieService {
 
     }
 
+    public List<SerieDTO> obtenerLanzamientosMasrecientes(){
+        return convierteDatos(repository.lanzamientosMasRecientes());
+    }
+
     public List<SerieDTO> convierteDatos(List<Serie> serie){
         return serie.stream()
-                .map(s -> new SerieDTO(s.getTitulo(), s.getTotalTemporadas(), s.getEvaluacion(), s.getPoster(), s.getGenero(),
+                .map(s -> new SerieDTO(s.getId(), s.getTitulo(), s.getTotalTemporadas(), s.getEvaluacion(), s.getPoster(), s.getGenero(),
                         s.getActores(), s.getSinopsis()))
                 .collect(Collectors.toList());
+    }
+
+    public SerieDTO obtenerPorId(Long id) {
+        Optional<Serie> serie = repository.findById(id);
+        if (serie.isPresent()){
+            Serie s = serie.get();
+            return new SerieDTO(s.getId(), s.getTitulo(), s.getTotalTemporadas(), s.getEvaluacion(), s.getPoster(), s.getGenero(),
+                    s.getActores(), s.getSinopsis());
+        }
+        return null;
     }
 }
